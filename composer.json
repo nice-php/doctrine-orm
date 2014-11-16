@@ -1,5 +1,5 @@
 {
-  "name": "nice-php/doctrine-orm",
+  "name": "nice/doctrine-orm",
   "description": "Integrates Doctrine ORM with Nice PHP framework",
   "license": "MIT",
   "require": {
