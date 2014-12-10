@@ -58,14 +58,15 @@ class DoctrineOrmExtension extends Extension
         $configuration = $this->getConfiguration($configs, $container);
         $config = $this->processConfiguration($configuration, $configs);
 
-        $container->register('doctrine.orm.metadata.annotation', 'Doctrine\ORM\Mapping\Driver\AnnotationDriver')
-            ->setFactoryService('doctrine.orm.configuration')
-            ->setFactoryMethod('newDefaultAnnotationDriver')
-            ->addArgument($config['mapping']['paths'])
-            ->addArgument(false);
+        $container->register('doctrine.orm.metadata_driver', 'Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain')
+            ->setPublic(false);
+
+        foreach ($config['mapping'] as $mappingConfig) {
+            $this->configureMappingDriver($mappingConfig, $container);
+        }
 
         $container->register('doctrine.orm.configuration', 'Doctrine\ORM\Configuration')
-            ->addMethodCall('setMetadataDriverImpl', array(new Reference('doctrine.orm.metadata.annotation')))
+            ->addMethodCall('setMetadataDriverImpl', array(new Reference('doctrine.orm.metadata_driver')))
             ->addMethodCall('setProxyNamespace', array('Proxy'));
 
         if ($container->hasParameter('app.cache') && $container->getParameter('app.cache') === true) {
@@ -84,5 +85,24 @@ class DoctrineOrmExtension extends Extension
         $container->register('doctrine.dbal.database_connection', 'Doctrine\DBAL\Connection')
             ->setFactoryService('doctrine.orm.entity_manager')
             ->setFactoryMethod('getConnection');
+    }
+
+    private function configureMappingDriver(array $config, ContainerBuilder $container)
+    {
+        $name = 'doctrine.orm.metadata.' . ($config['namespace'] ? preg_replace('/[^a-z]/i', '.', strtolower($config['namespace'])) : 'default');
+        switch ($config['driver']) {
+            case 'annotation':
+                $container->register($name, 'Doctrine\ORM\Mapping\Driver\AnnotationDriver')
+                    ->setPublic(false)
+                    ->setFactoryService('doctrine.orm.configuration')
+                    ->setFactoryMethod('newDefaultAnnotationDriver')
+                    ->addArgument($config['paths'])
+                    ->addArgument(false);
+
+                break;
+        }
+
+        $container->getDefinition('doctrine.orm.metadata_driver')
+            ->addMethodCall('addDriver', array(new Reference($name), $config['namespace']));
     }
 }

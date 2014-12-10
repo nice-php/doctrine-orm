@@ -28,8 +28,10 @@ class DoctrineOrmExtensionTest extends \PHPUnit_Framework_TestCase
                     'driver' => 'pdo_mysql'
                 ),
                 'mapping' => array(
-                    'paths' => array(
-                        __DIR__
+                    array(
+                        'paths' => array(
+                            __DIR__
+                        )
                     )
                 )
             )
@@ -57,8 +59,10 @@ class DoctrineOrmExtensionTest extends \PHPUnit_Framework_TestCase
                     'driver' => 'pdo_mysql'
                 ),
                 'mapping' => array(
-                    'paths' => array(
-                        __DIR__
+                    array(
+                        'paths' => array(
+                            __DIR__
+                        )
                     )
                 )
             )

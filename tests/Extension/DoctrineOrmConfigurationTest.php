@@ -22,7 +22,14 @@ class DoctrineOrmConfigurationTest extends \PHPUnit_Framework_TestCase
         );
 
         $processor = new Processor();
-        $config = $processor->processConfiguration(new DoctrineOrmConfiguration(), array(array()));
+        $config = $processor->processConfiguration(
+            new DoctrineOrmConfiguration(),
+            array(
+                'doctrine' => array(
+                    'database' => array('driver' => 'pdo_mysql')
+                )
+            )
+        );
     }
 
     public function testRequiresDatabaseElement()
@@ -33,17 +40,40 @@ class DoctrineOrmConfigurationTest extends \PHPUnit_Framework_TestCase
         );
 
         $processor = new Processor();
-        $config = $processor->processConfiguration(new DoctrineOrmConfiguration(), array(array('mapping' => array('paths' => array(__DIR__)))));
+        $config = $processor->processConfiguration(
+            new DoctrineOrmConfiguration(),
+            array(
+                'doctrine' => array(
+                    'mapping' => array(
+                        array('paths' => array(__DIR__))
+                    )
+                )
+            )
+        );
     }
 
     public function testDefaultOrmConfig()
     {
         $processor = new Processor();
-        $config = $processor->processConfiguration(new DoctrineOrmConfiguration(), array('doctrine' => array('mapping' => array('paths' => array(__DIR__)), 'database' => array('driver' => 'pdo_mysql'))));
+        $config = $processor->processConfiguration(
+            new DoctrineOrmConfiguration(),
+            array('doctrine' => array(
+                'mapping' => array(
+                    array('paths' => array(__DIR__))
+                ),
+                'database' => array('driver' => 'pdo_mysql')
+            ))
+        );
 
         $this->assertEquals(
             array(
-                'mapping' => array('paths' => array(__DIR__)),
+                'mapping' => array(
+                    array(
+                        'paths' => array(__DIR__),
+                        'driver' => 'annotation',
+                        'namespace' => ''
+                    )
+                ),
                 'database' => array('driver' => 'pdo_mysql')
             ),
             $config
