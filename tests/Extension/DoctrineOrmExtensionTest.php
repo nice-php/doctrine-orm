@@ -28,7 +28,8 @@ class DoctrineOrmExtensionTest extends \PHPUnit_Framework_TestCase
                     'driver' => 'pdo_mysql'
                 ),
                 'mapping' => array(
-                    array(
+                    'default' => array(
+                        'namespace' => 'Example',
                         'paths' => array(
                             __DIR__
                         )
@@ -58,21 +59,21 @@ class DoctrineOrmExtensionTest extends \PHPUnit_Framework_TestCase
                     'driver' => 'pdo_mysql'
                 ),
                 'mapping' => array(
-                    array(
+                    'xml' => array(
                         'driver' => 'xml',
                         'namespace' => 'Example\Xml',
                         'paths' => array(
                             __DIR__
                         )
                     ),
-                    array(
+                    'yaml' => array(
                         'driver' => 'yml',
                         'namespace' => 'Example\Yaml',
                         'paths' => array(
                             __DIR__
                         )
                     ),
-                    array(
+                    'php' => array(
                         'driver' => 'php',
                         'namespace' => 'Example\Php',
                         'paths' => array(
@@ -83,9 +84,9 @@ class DoctrineOrmExtensionTest extends \PHPUnit_Framework_TestCase
             )
         ), $container);
 
-        $this->assertTrue($container->has('doctrine.orm.metadata.example.xml'));
-        $this->assertTrue($container->has('doctrine.orm.metadata.example.yaml'));
-        $this->assertTrue($container->has('doctrine.orm.metadata.example.php'));
+        $this->assertTrue($container->has('doctrine.orm.metadata.xml'));
+        $this->assertTrue($container->has('doctrine.orm.metadata.yaml'));
+        $this->assertTrue($container->has('doctrine.orm.metadata.php'));
         $this->assertCount(3, $container->getDefinition('doctrine.orm.metadata_driver')->getMethodCalls());
     }
 
@@ -104,7 +105,8 @@ class DoctrineOrmExtensionTest extends \PHPUnit_Framework_TestCase
                     'driver' => 'pdo_mysql'
                 ),
                 'mapping' => array(
-                    array(
+                    'default' => array(
+                        'namespace' => 'Example',
                         'paths' => array(
                             __DIR__
                         )

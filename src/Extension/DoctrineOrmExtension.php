@@ -58,10 +58,10 @@ class DoctrineOrmExtension extends Extension
         $configuration = $this->getConfiguration($configs, $container);
         $config = $this->processConfiguration($configuration, $configs);
 
-        $container->register('doctrine.orm.metadata_driver', 'Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain')
-            ->setPublic(false);
+        $container->register('doctrine.orm.metadata_driver', 'Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain');
 
-        foreach ($config['mapping'] as $mappingConfig) {
+        foreach ($config['mapping'] as $name => $mappingConfig) {
+            $mappingConfig['name'] = $name;
             $this->configureMappingDriver($mappingConfig, $container);
         }
 
@@ -89,7 +89,7 @@ class DoctrineOrmExtension extends Extension
 
     private function configureMappingDriver(array $config, ContainerBuilder $container)
     {
-        $name = 'doctrine.orm.metadata.' . ($config['namespace'] ? preg_replace('/[^a-z]/i', '.', strtolower($config['namespace'])) : 'default');
+        $name = 'doctrine.orm.metadata.'.$config['name'];
         switch ($config['driver']) {
             case 'annotation':
                 $container->register($name, 'Doctrine\ORM\Mapping\Driver\AnnotationDriver')

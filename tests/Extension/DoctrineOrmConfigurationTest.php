@@ -45,7 +45,10 @@ class DoctrineOrmConfigurationTest extends \PHPUnit_Framework_TestCase
             array(
                 'doctrine' => array(
                     'mapping' => array(
-                        array('paths' => array(__DIR__))
+                        'default' => array(
+                            'namespace' => 'Example',
+                            'paths' => array(__DIR__)
+                        )
                     )
                 )
             )
@@ -57,21 +60,26 @@ class DoctrineOrmConfigurationTest extends \PHPUnit_Framework_TestCase
         $processor = new Processor();
         $config = $processor->processConfiguration(
             new DoctrineOrmConfiguration(),
-            array('doctrine' => array(
-                'mapping' => array(
-                    array('paths' => array(__DIR__))
-                ),
-                'database' => array('driver' => 'pdo_mysql')
-            ))
+            array(
+                'doctrine' => array(
+                    'mapping' => array(
+                        'default' => array(
+                            'namespace' => 'Example',
+                            'paths' => array(__DIR__)
+                        )
+                    ),
+                    'database' => array('driver' => 'pdo_mysql')
+                )
+            )
         );
 
         $this->assertEquals(
             array(
                 'mapping' => array(
-                    array(
+                    'default' => array(
                         'paths' => array(__DIR__),
                         'driver' => 'annotation',
-                        'namespace' => ''
+                        'namespace' => 'Example'
                     )
                 ),
                 'database' => array('driver' => 'pdo_mysql')
