@@ -45,6 +45,51 @@ class DoctrineOrmExtensionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test different drivers
+     */
+    public function testDifferentDrivers()
+    {
+        $extension = new DoctrineOrmExtension();
+
+        $container = new ContainerBuilder();
+        $extension->load(array(
+            'doctrine' => array(
+                'database' => array(
+                    'driver' => 'pdo_mysql'
+                ),
+                'mapping' => array(
+                    array(
+                        'driver' => 'xml',
+                        'namespace' => 'Example\Xml',
+                        'paths' => array(
+                            __DIR__
+                        )
+                    ),
+                    array(
+                        'driver' => 'yml',
+                        'namespace' => 'Example\Yaml',
+                        'paths' => array(
+                            __DIR__
+                        )
+                    ),
+                    array(
+                        'driver' => 'php',
+                        'namespace' => 'Example\Php',
+                        'paths' => array(
+                            __DIR__
+                        )
+                    )
+                )
+            )
+        ), $container);
+
+        $this->assertTrue($container->has('doctrine.orm.metadata.example.xml'));
+        $this->assertTrue($container->has('doctrine.orm.metadata.example.yaml'));
+        $this->assertTrue($container->has('doctrine.orm.metadata.example.php'));
+        $this->assertCount(3, $container->getDefinition('doctrine.orm.metadata_driver')->getMethodCalls());
+    }
+
+    /**
      * Test the DoctrineOrmExtension
      */
     public function testConfigureWithCache()

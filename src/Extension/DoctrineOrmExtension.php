@@ -100,6 +100,27 @@ class DoctrineOrmExtension extends Extension
                     ->addArgument(false);
 
                 break;
+
+            case 'xml':
+                $container->register($name, 'Doctrine\ORM\Mapping\Driver\XmlDriver')
+                    ->setPublic(false)
+                    ->addArgument($config['paths']);
+
+                break;
+
+            case 'yml':
+                $container->register($name, 'Doctrine\ORM\Mapping\Driver\YamlDriver')
+                    ->setPublic(false)
+                    ->addArgument($config['paths']);
+
+                break;
+
+            case 'php':
+                $container->register($name, 'Doctrine\Common\Persistence\Mapping\Driver\PHPDriver')
+                    ->setPublic(false)
+                    ->addArgument($config['paths']);
+
+                break;
         }
 
         $container->getDefinition('doctrine.orm.metadata_driver')
