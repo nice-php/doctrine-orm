@@ -18,7 +18,7 @@ class DoctrineOrmConfigurationTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException(
             'Symfony\Component\Config\Definition\Exception\InvalidConfigurationException',
-            'The child node "mapping" at path "doctrine" must be configured.'
+            'The child node "mapping" at path "doctrine_orm" must be configured.'
         );
 
         $processor = new Processor();
@@ -36,7 +36,7 @@ class DoctrineOrmConfigurationTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException(
             'Symfony\Component\Config\Definition\Exception\InvalidConfigurationException',
-            'The child node "database" at path "doctrine" must be configured.'
+            'The child node "database" at path "doctrine_orm" must be configured.'
         );
 
         $processor = new Processor();
