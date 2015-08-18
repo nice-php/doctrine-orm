@@ -17,7 +17,7 @@ class DoctrineOrmExtensionTest extends \PHPUnit_Framework_TestCase
     /**
      * Test the DoctrineOrmExtension
      */
-    public function testConfigure()
+    public function testConfigureWithoutCache()
     {
         $extension = new DoctrineOrmExtension();
 
@@ -42,7 +42,7 @@ class DoctrineOrmExtensionTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($container->has('doctrine.orm.configuration'));
         $this->assertTrue($container->has('doctrine.dbal.database_connection'));
         $this->assertTrue($container->has('doctrine.dbal.configuration'));
-        $this->assertCount(2, $container->getDefinition('doctrine.orm.configuration')->getMethodCalls());
+        $this->assertCount(4, $container->getDefinition('doctrine.orm.configuration')->getMethodCalls());
     }
 
     /**

@@ -9,6 +9,7 @@
 
 namespace Nice\Extension;
 
+use Doctrine\Common\Proxy\AbstractProxyFactory;
 use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
@@ -72,6 +73,11 @@ class DoctrineOrmExtension extends Extension
         if ($container->hasParameter('app.cache') && $container->getParameter('app.cache') === true) {
             $container->getDefinition('doctrine.orm.configuration')
                 ->addMethodCall('setProxyDir', array('%app.cache_dir%/doctrine'));
+        } else {
+            $container->getDefinition('doctrine.orm.configuration')
+                ->addMethodCall('setProxyDir', array(sys_get_temp_dir().'/doctrine'))
+                ->addMethodCall('setAutoGenerateProxyClasses', array(AbstractProxyFactory::AUTOGENERATE_EVAL));
+
         }
 
         $container->register('doctrine.orm.entity_manager', 'Doctrine\ORM\EntityManager')
